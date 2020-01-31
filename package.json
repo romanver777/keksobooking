@@ -1,0 +1,21 @@
+{
+  "name": "keksobooking",
+  "description": "проект «Кексобукинг»",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.20.0",
+    "parcel-bundler": "^1.12.4"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "scripts": {
+    "test": "eslint js/",
+    "fix": "eslint js/ --fix",
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "engines": {
+    "node": "11.9.0"
+  }
+}
