@@ -12,12 +12,20 @@
 
     const mapWidth = map.offsetWidth;
 
+    const limits = {
+        top: 140,
+        bottom: 640,
+        left: 0,
+        right: mapWidth,
+    };
+
 // отключение доступности полей ввода на начальном экране
     (function () {
         const fieldSetList = document.querySelector('.ad-form').querySelectorAll('fieldset');
 
         for (const item of fieldSetList) {
-            item.setAttribute('disabled', 'true');
+
+            item.disabled = true;
         }
     }());
 
@@ -26,46 +34,58 @@
         const fieldSetList = document.querySelector('.ad-form').querySelectorAll('fieldset');
 
         for (const item of fieldSetList) {
-            item.removeAttribute('disabled');
+
+            item.disabled = false;
         }
     }
 
-// активация главной страницы
-    (function () {
-        const MapPinMainButtonMouseupHandler = () => {
-            map.classList.remove('map--faded');
-            form.classList.remove('ad-form--disabled');
+// данные получены
+    function successHandler(data) {
 
-            enableFormFields();
-            createPins();
-            addPinsListener();
+        window.ads = data;
+        createPins(ads);
+    }
 
-            mapPinMain.removeEventListener('click', MapPinMainButtonMouseupHandler);
-        };
+// вывод сообщения об ошибке
+    function errorHandler(message) {
 
-        setLocation(getLocation());
+        alert(message);
+    }
 
-        mapPinMain.addEventListener('click', MapPinMainButtonMouseupHandler);
-    }());
-
-// получение координат главной кнопки
-    function getLocation() {
+// получение координат главной кнопки и добавление в поле адрес
+    window.getMainPinLocation = () => {
         const {left} = mapPinMain.style;
         const {top} = mapPinMain.style;
+
+        const address = document.querySelector('#address');
 
 
         const x = +left.slice(0, -2) + mainPinWidth / 2;
         const y = +top.slice(0, -2) + mainPinHeight;
 
-        return {x, y};
-    }
+        address.value = `${x}, ${y}`;
+    };
 
-// размещение координат главной кнопки в блоке адрес
-    function setLocation(object) {
-        const address = document.querySelector('#address');
+// активация главной страницы
+    (function () {
+        const MapPinMainButtonMouseupHandler = () => {
 
-        address.value = `${object.x}, ${object.y}`;
-    }
+            map.classList.remove('map--faded');
+            form.classList.remove('ad-form--disabled');
+
+            enableFormFields();
+            window.load(successHandler, errorHandler);
+
+            checkForm();
+            addPinsListener();
+
+            mapPinMain.removeEventListener('click', MapPinMainButtonMouseupHandler);
+        };
+
+        window.getMainPinLocation();
+
+        mapPinMain.addEventListener('click', MapPinMainButtonMouseupHandler);
+    }());
 
 // добавление прослушки на клик по пину
     function addPinsListener() {
@@ -109,13 +129,6 @@
     }
 
 // перетаскивание главной кнопки пина
-    const limits = {
-        top: 140,
-        bottom: 640,
-        left: 0,
-        right: mapWidth,
-    };
-
     mapPinMain.addEventListener('mousedown', (event) => {
         event.preventDefault();
 
@@ -171,5 +184,4 @@
         document.addEventListener('mousemove', onMousemove);
         document.addEventListener('mouseup', onMouseup);
     });
-
 })();
