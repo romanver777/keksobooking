@@ -40,13 +40,6 @@
                 onError(`Что-то пошло не так, ошибка: ${req.status}`);
             }
         };
-        // req.addEventListener('load', function () {
-        //     if (req.status === 200) {
-        //         onLoad(req.response);
-        //     } else {
-        //         onError(req.response);
-        //     }
-        // });
         req.onerror = () => onError(`Ошибка соединения: ${req.status}`);
 
         req.open('POST', urlSend);

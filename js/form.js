@@ -23,6 +23,13 @@ function checkForm() {
             hiddenEL: [0, 1, 2]
         },
     ];
+    const priceSetup = {
+
+        'bungalo': 500,
+        'flat': 1000,
+        'house': 5000,
+        'palace': 10000
+    };
 
     let typeEl = formEl.querySelector('#type');
     let priceEL = formEl.querySelector('#price');
@@ -31,16 +38,20 @@ function checkForm() {
 
     let capacityOptionlist = capacityEL.querySelectorAll('option');
 
-
+// установка всех значений для количества мест
     function setDefaultRoomOption() {
 
         capacityOptionlist.forEach((el) => capacityEL.appendChild(el) );
     }
+
+// установка значения по умолчанию для стоимости жилья
     function setDefaultTypeOption() {
 
         priceEL.min = minPriceForFlat;
         priceEL.placeholder = placeholderForFlat;
     }
+
+// изменение количества мест в зависимости от выбора кол-ва комнат
     function changeCapacityOptionField(currentValue) {
 
         capacitySetup.forEach((el) => {
@@ -55,9 +66,10 @@ function checkForm() {
         });
     }
 
-    function onSuccessHandler(data) {
+// успешное создание объявления
+    function onSuccessHandler() {
 
-        console.log('success: ',data);
+        window.createPopupMessage('success');
 
         formEl.reset();
 
@@ -68,39 +80,43 @@ function checkForm() {
 
         changeCapacityOptionField(roomNumberEL.value);
     }
-    function onErrorHandler(data) {
 
-        console.log('error: ', data);
+// ошибка создания объявления
+    function onErrorHandler() {
 
+        window.createPopupMessage('error');
     }
 
+// замена стоимости
     typeEl.addEventListener('change', () => {
 
         switch (typeEl.value) {
 
             case 'bungalo': {
-                priceEL.min = 500;
-                priceEL.placeholder = 500;
+                priceEL.min = priceSetup['bungalo'];
+                priceEL.placeholder = priceSetup['bungalo'];
             }
                 break;
             case 'flat': {
-                priceEL.min = 1000;
-                priceEL.placeholder = 1000;
+                priceEL.min = priceSetup['flat'];
+                priceEL.placeholder = priceSetup['flat'];
             }
                 break;
             case 'house': {
-                priceEL.min = 5000;
-                priceEL.placeholder = 5000;
+                priceEL.min = priceSetup['house'];
+                priceEL.placeholder = priceSetup['house'];
             }
                 break;
             case 'palace': {
-                priceEL.min = 10000;
-                priceEL.placeholder = 10000;
+                priceEL.min = priceSetup['palace'];
+                priceEL.placeholder = priceSetup['palace'];
             }
                 break;
         }
         console.log(typeEl.value);
     });
+
+// замена кол-ва мест
     roomNumberEL.addEventListener('change', () => {
 
         let currentVal = roomNumberEL.value;
@@ -129,16 +145,15 @@ function checkForm() {
                 break;
         }
     });
+
+// отправка формы
     formEl.addEventListener('submit', (e) => {
 
         e.preventDefault();
-        let formData = [...new FormData(formEl)];
-        console.log(formData);
 
         window.save(new FormData(formEl), onSuccessHandler, onErrorHandler);
-
-
     });
 
+// установка начального значения кол-ва мест
     changeCapacityOptionField(roomNumberEL.value);
 }

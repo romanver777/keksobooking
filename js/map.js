@@ -39,6 +39,23 @@
         }
     }
 
+// создание окна результата
+    window.createPopupMessage = (nameElem, message = '') => {
+
+        const notice = document.querySelector('.notice');
+        let template = document.querySelector(`#${nameElem}`).content.querySelector(`.${nameElem}`);
+
+        notice.appendChild(template.cloneNode(true));
+
+        if(nameElem == 'error') {
+
+            notice.querySelector('.error__message').innerText = message;
+        }
+        const elem = document.querySelector(`.${nameElem}`);
+
+        elem.addEventListener('click', () => notice.removeChild(elem));
+    };
+
 // данные получены
     function successHandler(data) {
 
@@ -49,7 +66,7 @@
 // вывод сообщения об ошибке
     function errorHandler(message) {
 
-        alert(message);
+        window.createPopupMessage('error', message);
     }
 
 // получение координат главной кнопки и добавление в поле адрес
@@ -89,7 +106,9 @@
 
 // добавление прослушки на клик по пину
     function addPinsListener() {
+
         const mapPinsClickHandler = (e) => {
+
             e.stopPropagation();
 
             const str = 'pin__img-';
@@ -116,6 +135,7 @@
 
 // добавление прослушки на клик по кресту карточки
     function addCloseCardListener() {
+
         const popupClose = document.querySelector('.popup__close');
 
         const popupCloseClickHandler = (e) => {
@@ -130,6 +150,7 @@
 
 // перетаскивание главной кнопки пина
     mapPinMain.addEventListener('mousedown', (event) => {
+
         event.preventDefault();
 
         let startCoords = {
