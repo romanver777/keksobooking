@@ -1,11 +1,21 @@
 // создание карточки объекта
-function createCard(index) {
+function createCard(elemId) {
 
     const map = document.querySelector('.map');
     const cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+    const dictionary = {
+        "bungalo": "Бунгало",
+        "flat": "Квартира",
+        "house": "Дом",
+        "palace": "Дворец"
+    };
 
     map.appendChild(cardTemplate.cloneNode(true));
 
+    let adsCopy = ads.filter((el) => {
+
+        return el.id == +elemId;
+    });
 
     const popupAvatar = document.querySelector('.popup__avatar');
     const popupTitle = document.querySelector('.popup__title');
@@ -17,20 +27,21 @@ function createCard(index) {
     const popupFeatures = document.querySelector('.popup__features');
     const popupPhotos = document.querySelector('.popup__photos');
 
-
-    popupAvatar.src = ads[index].author.avatar;
-    popupTitle.innerHTML = ads[index].offer.title;
-    popupTextAddress.innerHTML = ads[index].offer.address;
-    popupTextPrice.innerHTML = `${ads[index].offer.price}&#x20bd;<span>/ночь</span>`;
-    popupType.innerHTML = ads[index].offer.type;
-    popupTextCapacity.innerHTML = `${ads[index].offer.rooms} комнаты для ${ads[index].offer.guests} гостей`;
-    popupTextTime.innerHTML = `Заезд после ${ads[index].offer.checkIn}, выезд до ${ads[index].offer.checkOut}`;
+    popupAvatar.src = adsCopy[0].author.avatar;
+    popupTitle.innerHTML = adsCopy[0].offer.title;
+    popupTextAddress.innerHTML = adsCopy[0].offer.address;
+    popupTextPrice.innerHTML = `${adsCopy[0].offer.price}&#x20bd;<span>/ночь</span>`;
+    popupType.innerHTML = dictionary[ adsCopy[0].offer.type ];
+    popupTextCapacity.innerHTML = `${adsCopy[0].offer.rooms} комнаты для ${adsCopy[0].offer.guests} гостей`;
+    popupTextTime.innerHTML = `Заезд после ${adsCopy[0].offer.checkin}, выезд до ${adsCopy[0].offer.checkout}`;
 
     (function createFeatures() {
+
         popupFeatures.innerHTML = '';
 
-        for (const el of ads[index].offer.features) {
-            const li = document.createElement('li');
+        for (let el of adsCopy[0].offer.features) {
+
+            let li = document.createElement('li');
 
             li.classList.add('popup__feature');
             li.classList.add(`popup__feature--${el}`);
@@ -40,10 +51,12 @@ function createCard(index) {
     }());
 
     (function createPhotos() {
+
         popupPhotos.innerHTML = '';
 
-        for (const el of ads[index].offer.photos) {
-            const img = document.createElement('img');
+        for (let el of adsCopy[0].offer.photos) {
+
+            let img = document.createElement('img');
 
             img.setAttribute('class', 'popup__photo');
 
