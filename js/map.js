@@ -4,6 +4,7 @@
     const map = document.querySelector('.map');
     const mapPins = document.querySelector('.map__pins');
     const mapPinMain = document.querySelector('.map__pin--main');
+    const mapFilters = document.querySelector('.map__filters');
 
     const form = document.querySelector('.ad-form');
 
@@ -60,6 +61,14 @@
     function successHandler(data) {
 
         window.ads = data;
+
+        let count = 0;
+
+        ads.forEach((el) => {
+
+            el.id = count++;
+        });
+
         createPins(ads);
     }
 
@@ -85,7 +94,10 @@
 
 // активация главной страницы
     (function () {
-        const MapPinMainButtonMouseupHandler = () => {
+
+        window.getMainPinLocation();
+
+        let MapPinMainButtonMouseupHandler = () => {
 
             map.classList.remove('map--faded');
             form.classList.remove('ad-form--disabled');
@@ -99,15 +111,81 @@
             mapPinMain.removeEventListener('click', MapPinMainButtonMouseupHandler);
         };
 
-        window.getMainPinLocation();
+        let mapFiltersChangeHandler = () => {
+
+            setTimeout( () => {
+
+                let adsCopy = window.ads;
+                let formData = [...new FormData(mapFilters)];
+                const str = 'housing-';
+
+                // добавление рейтинга к объектам
+                adsCopy.forEach((el) => {
+
+                    el.rate = 0;
+                });
+
+                // выборка измененных значений фильтра
+                let formDataFiltered = formData.filter((el) => {
+
+                    return el[1] != 'any';
+                });
+
+                // поиск соответствия элементам фильтра среди объектов
+                formDataFiltered.forEach( (el) => {
+
+                    let key = el[0].slice(str.length, el[0].length);
+
+                    adsCopy.forEach( (elem) => {
+
+                        if(el[0] !== 'features') {
+
+                            if(key == 'price') {
+
+                                switch ( el[1] ) {
+
+                                    case 'low': if( elem.offer[key] < 10000 ) elem.rate += 1;
+                                        break;
+                                    case 'middle': if( elem.offer[key] >= 10000 && elem.offer[key] < 50000 ) elem.rate += 1;
+                                        break;
+                                    case 'high': if( elem.offer[key] >= 50000 ) elem.rate += 1;
+                                        break;
+                                }
+                            } else {
+
+                                if ( el[1] == elem.offer[key] ) {
+
+                                    elem.rate += 1;
+                                }
+                            }
+                        } else {
+
+                            if( elem.offer[ el[0] ].indexOf( el[1] ) > -1 ) {
+
+                                elem.rate += 1;
+                            }
+                        }
+                    });
+                });
+                // фильтрация по рейтингу соответствующему кол-ву выбранных фильров
+                adsCopy = adsCopy.filter( (el) => {
+
+                    return el.rate == formDataFiltered.length;
+                });
+
+                createPins(adsCopy);
+            }, 500);
+
+        };
 
         mapPinMain.addEventListener('click', MapPinMainButtonMouseupHandler);
+        mapFilters.addEventListener('change', mapFiltersChangeHandler);
     }());
 
 // добавление прослушки на клик по пину
     function addPinsListener() {
 
-        const mapPinsClickHandler = (e) => {
+        let mapPinsClickHandler = (e) => {
 
             e.stopPropagation();
 
@@ -138,7 +216,8 @@
 
         const popupClose = document.querySelector('.popup__close');
 
-        const popupCloseClickHandler = (e) => {
+        let popupCloseClickHandler = (e) => {
+
             e.stopPropagation();
             e.target.parentNode.remove();
 
