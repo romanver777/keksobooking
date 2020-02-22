@@ -154,6 +154,93 @@ function checkForm() {
         window.save(new FormData(formEl), onSuccessHandler, onErrorHandler);
     });
 
+// добавление картинок
+    (function () {
+
+        const types = ['gif', 'jpg', 'jpeg', 'png'];
+
+        const fileInputAvatar = document.querySelector('.ad-form__field input[type= file]');
+        const previewAvatar = document.querySelector('.ad-form-header__preview img');
+
+        const fileInputPhoto = document.querySelector('#images');
+        const previewPhoto = document.querySelector('.ad-form__photo');
+
+        const imgSize = {
+            'width': '50px',
+            'height': '50px',
+            'margin': '0 10px 10px 0'
+        };
+        const previewStyle = {
+            'display': 'flex',
+            'flex-wrap': 'wrap',
+            'align-items': 'center',
+            'justify-content': 'center',
+            'width': 'auto',
+            'height': 'auto',
+            'padding': '10px 0 0 10px'
+        };
+
+        fileInputAvatar.addEventListener('change', () => {
+
+            let file = fileInputAvatar.files[0];
+            let fileName = file.name.toLowerCase();
+
+            let match = types.some((el) => {
+
+                return fileName.endsWith(el);
+            });
+
+            if (match) {
+                let reader = new FileReader();
+
+                reader.addEventListener('load', () => {
+
+                    previewAvatar.src = reader.result;
+                });
+                reader.readAsDataURL(file);
+            }
+        });
+
+        fileInputPhoto.addEventListener('change', () => {
+
+            if(fileInputPhoto.files.length) {
+
+                for(let file of fileInputPhoto.files) {
+
+                    let fileName = file.name.toLowerCase();
+
+                    let match = types.some((el) => {
+
+                        return fileName.endsWith(el);
+                    });
+
+                    if (match) {
+                        let reader = new FileReader();
+
+                        reader.addEventListener('load', () => {
+
+                            for (let key in previewStyle) {
+
+                                previewPhoto.style[key] = previewStyle[key];
+                            }
+                            let img = new Image();
+
+                            for (let key in imgSize) {
+
+                                img.style[key] = imgSize[key];
+                            }
+
+                            img.src = reader.result;
+
+                            previewPhoto.appendChild(img);
+                        });
+                        reader.readAsDataURL(file);
+                    }
+                }
+            }
+        });
+    })();
+
 // установка начального значения кол-ва мест
     changeCapacityOptionField(roomNumberEL.value);
 }
