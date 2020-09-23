@@ -51,6 +51,17 @@ function checkForm() {
         priceEL.placeholder = placeholderForFlat;
     }
 
+// установка значения по умолчанию для аватарки и фото
+	  function setDefaultImgsOption() {
+
+		    document.querySelector('.ad-form__photo').innerHTML = '';
+		    document.querySelector('.ad-form__photo').style = '';
+		    document.querySelector('.ad-form-header__preview img').src = 'img/muffin-grey.svg';
+	  }
+
+// очистка формы
+	  document.querySelector('.ad-form__reset').addEventListener('click', () => setDefaultImgsOption() );
+
 // изменение количества мест в зависимости от выбора кол-ва комнат
     function changeCapacityOptionField(currentValue) {
 
@@ -77,6 +88,7 @@ function checkForm() {
 
         setDefaultTypeOption();
         setDefaultRoomOption();
+        setDefaultImgsOption();
 
         changeCapacityOptionField(roomNumberEL.value);
     }

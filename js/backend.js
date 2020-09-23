@@ -1,8 +1,8 @@
 // получение и отправка данных на сервер
 (function () {
 
-    const url     = 'https://js.dump.academy/keksobooking/data';
-    const urlSend = 'https://js.dump.academy/keksobooking';
+	const url     = 'https://javascript.pages.academy/keksobooking/data';
+	const urlSend= 'https://javascript.pages.academy/keksobooking';
 
     window.load = (onSuccess, onError) => {
 
