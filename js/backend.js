@@ -1,7 +1,7 @@
 // получение и отправка данных на сервер
 (function () {
 
-	const url     = 'https://javascript.pages.academy/keksobooking/data';
+	const url     = 'https://run.mocky.io/v3/2dc10ffc-6caa-4204-8462-c627aafbfec9';
 	const urlSend= 'https://javascript.pages.academy/keksobooking';
 
     window.load = (onSuccess, onError) => {
