@@ -13,7 +13,7 @@
 
             if(req.status == 200) {
 
-                onSuccess(req.response.json());
+                onSuccess(req.response);
             } else {
 
                 onError(`Что-то пошло не так, ошибка: ${req.status}`);
