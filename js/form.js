@@ -94,9 +94,9 @@ function checkForm() {
     }
 
 // ошибка создания объявления
-    function onErrorHandler() {
+    function onErrorHandler(el, message) {
 
-        window.createPopupMessage('error');
+        window.createPopupMessage(el, message);
     }
 
 // замена стоимости
