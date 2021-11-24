@@ -36,7 +36,7 @@ function createPins(pins) {
         mapPinImg[i].src = pins[i - 1].author.avatar;
         mapPinImg[i].classList.add(`pin__img-${pins[i-1].id}`);
 
-        mapPinList[i].style.left = `${pins[i - 1].location.x}px`;
-        mapPinList[i].style.top = `${pins[i - 1].location.y}px`;
+        mapPinList[i].style.left = `${pins[i - 1].location.lat}px`;
+        mapPinList[i].style.top = `${pins[i - 1].location.lng}px`;
     }
 }
